@@ -1,14 +1,10 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Context } from "../index";
 
 const Navbar = () => {
   const { loggedin, user } = useContext(Context);
-  const navigate = useNavigate();
-  const cartClick = () => {
-    loggedin ? navigate("/cart") : navigate("/login");
-  };
 
   return (
     <div className="navbar">
@@ -29,13 +25,9 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="navbar-right">
-        <div
-          className="navbar-link"
-          style={{ cursor: "pointer" }}
-          onClick={cartClick}
-        >
-          Cart
-        </div>
+      <Link className="navbar-link" to="/cart">
+              Cart
+            </Link>
         {loggedin ? (
           <>
             <span
