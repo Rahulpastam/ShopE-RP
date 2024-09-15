@@ -1,71 +1,108 @@
-import React from "react";
-import { useState } from "react";
+// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const Signup = () => {
-  const [userName, setUserName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("")
-
-  const submitted = (event) => {
-    event.preventDefault();
-    // console.log(formData);
-      navigate('/login');
-    
-  };
+  const { register, handleSubmit, formState } = useForm();
+  const { errors } = formState;
 
   const navigate = useNavigate();
-  const goto = () =>{
-    navigate('/login');
-  }
+  const goto = () => {
+    navigate("/login");
+  };
 
+  const onSubmitHandler = (data) => {
+    navigate('/login');
+    // console.log(data);
+  };
 
   return (
     <>
-      <form className="container" action="">
+      <form
+        className="container"
+        onSubmit={handleSubmit(onSubmitHandler)}
+        noValidate
+      >
+        <div>
           <input
             type="text"
             placeholder="Name"
-            name="userName"
-            value={userName}
-            onChange={(e)=>{setUserName(e.value)}}
+            {...register("userName", {
+              required: {
+                value: true,
+                message: "Name is required",
+              },
+            })}
           />
+          <p className="errors">{errors.userName?.message}</p>
+        </div>
+        <div>
           <input
             type="text"
             placeholder="Contact"
-            name="phone"
-            value={phone}
-            onChange={(e)=>{setPhone(e.value)}}
+            {...register("phone", {
+              required: {
+                value: true,
+                message: "Contact is required",
+              },
+              pattern: {
+                value: /^[6-9]{1}[0-9]{9}$/,
+                message: "Invalid phone number",
+              },
+            })}
           />
+          <p className="errors">{errors.phone?.message}</p>
+        </div>
+        <div>
           <input
             type="text"
-            className="email"
             placeholder="email"
-            name="email"
-            value={email}
-            onChange={(e)=>{setEmail(e.value)}}
+            {...register("email", {
+              required: {
+                value: true,
+                message: "Email is required",
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email format",
+              },
+            })}
           />
+          <p className="errors">{errors.email?.message}</p>
+        </div>
+        <div>
+          {" "}
           <input
             type="password"
             placeholder="Password"
-            name="password"
-            value={password}
-            onChange={(e)=>{setPassword(e.value)}}
+            {...register("password", {
+              required: {
+                value: true,
+                message: "Password is required",
+              },
+            })}
           />
+          <p className="errors">{errors.password?.message}</p>
+        </div>
+        <div>
+          {" "}
           <input
             type="password"
             placeholder="ConfirmPassword"
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={(e)=>{setConfirmPassword(e.value)}}
+            {...register("confirmPassword", {
+              required: {
+                value: true,
+                message: "Confirm Password is required",
+              },
+            })}
           />
-        <button type="submit" onClick={submitted}>
-          Signup
-        </button>
-        <p>Already have an Account? <span onClick={goto}>Login</span></p>
-      </form>  
+          <p className="errors">{errors.confirmPassword?.message}</p>
+        </div>
+        <button type="submit">Signup</button>
+        <p>
+          Already have an Account? <span onClick={goto}>Login</span>
+        </p>
+      </form>
     </>
   );
 };

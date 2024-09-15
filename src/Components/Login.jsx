@@ -2,55 +2,72 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../index";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
   const {setLoggedin,setUser} = useContext(Context);
-  
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit, formState} = useForm();
+  const { errors } = formState;
+
+  const submitLogin = (data) => {
+    // console.log(data);
+    setLoggedin(true);
+    setUser(data.userName);
+    navigate("/")
+  }
 
   const navigate = useNavigate();
   const goto = () => {
     navigate("/signup");
   };
-
-  const submitted = (event) => {
-    event.preventDefault();
-    setLoggedin(true);
-    setUser(userName);
-    navigate("/")
-  };
   return (
     <>
-      <form className="container" action="">
-        <input 
+      <form className="container" onSubmit={handleSubmit(submitLogin)} noValidate>
+       <div> <input 
         type="text"
         className="userName"
-        value={userName}
-        placeholder="Username"
-        onChange={(e) => setUserName(e.target.value)}
+        placeholder="UserName"
+        {...register("userName", {
+          required: {
+            value: true,
+            message: "UserName is required"
+          }
+        })}
         />
-        <input
+        <p className="errors">{errors.userName?.message}</p>
+        </div>
+        <div><input
           type="text"
           className="email"
           placeholder="email"
-          name="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          {...register("email", {
+            required: {
+              value: true,
+              message: "email is required"
+            },
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email format",
+            }
+          })}
+
         />
-        <input
+        <p className="errors">{errors.email?.message}</p>
+        </div>
+        <div><input
           type="password"
           placeholder="Password"
-          name="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
+          {...register("password", {
+            required: {
+              value: true,
+              message: "password is required"
+            }
+          })}
+ 
         />
-        <button type="submit" onClick={submitted}>
+        <p className="errors">{errors.password?.message}</p>
+        </div>
+        <button type="submit">
           Login
         </button>
         <p>

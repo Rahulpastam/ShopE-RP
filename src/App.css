@@ -111,6 +111,11 @@ button[type="submit"] {
   color: #007bff;
   text-decoration: underline;
 }
+.errors{
+  color: red;
+  font-size: 20px;
+  text-align: left;
+}
 /*  */
 
 /* home */
