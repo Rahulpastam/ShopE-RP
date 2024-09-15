@@ -14,9 +14,10 @@ import Contact from "./Components/Contact.jsx";
 function App() {
   return (
     <>
+    <CartProvider>
       <Router>
         <Navbar />
-        <CartProvider>
+        
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Home />} />
@@ -26,8 +27,8 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/product/:productId" element={<Product />} />
           </Routes>
-        </CartProvider>
       </Router>
+      </CartProvider>
     </>
   );
 }
